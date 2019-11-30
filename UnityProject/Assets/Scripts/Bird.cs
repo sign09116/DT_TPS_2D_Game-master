@@ -39,9 +39,9 @@ public class Bird : MonoBehaviour
     private void Awake()
     {
         BirdRig = GetComponent<Rigidbody2D>();
-       // GoScore = Resources.Load("分數") as GameObject;
+        // GoScore = Resources.Load("分數") as GameObject;
         //GM = Resources.Load("遊戲管理器") as GameObject;
-        
+        GetComponent<Animator>().SetBool("Dead", false);
     }
     private void Start()
     {
@@ -95,11 +95,12 @@ public class Bird : MonoBehaviour
         _GM.GameOver();
         //遊戲時間暫停
         //Time.timeScale = 0;
+        GetComponent<Animator>().SetBool("Dead", true);
     }
     private void OnCollisionEnter2D(Collision2D Hit)
     {//碰到物件.遊戲物件.名稱或標籤
         print(Hit.gameObject.name);
-        if (Hit.gameObject.name == "地板")
+        if (Hit.gameObject.name == "地板" && !dead)
         {
             _Audio.PlayOneShot(HurtSound, 3f);
             Dead();  
@@ -109,7 +110,7 @@ public class Bird : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D Hit)
     {
-        if (Hit.gameObject.tag == "Pipe") 
+        if (Hit.gameObject.tag == "Pipe" && !dead) 
         {
             _Audio.PlayOneShot(HurtSound, 3f);
             Dead();
@@ -118,12 +119,13 @@ public class Bird : MonoBehaviour
        
     }
     private void OnTriggerExit2D(Collider2D Hit)
-    {
-        if (Hit.gameObject.tag == "AddScoreZone")
+    {//dead!=true
+     // !dead 簡寫
+        if (Hit.gameObject.tag == "AddScoreZone"&& !dead)
         {
             _Audio.PlayOneShot(AddScoreSound, 3f);
             _GM.AddScore();
-            _GM.scoreText.text = PlayerPrefs.GetInt(_Score).ToString();
+            _GM.scoreText.text = GM.GetComponent<GameManager>().score.ToString();
 
         }
     }
