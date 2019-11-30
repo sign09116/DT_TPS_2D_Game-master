@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {//public static void SetResolution(int width, int height, bool fullscreen);//靜態銀次解析度調整
-        Screen.SetResolution(720, 1080, false);
+        Screen.SetResolution(450, 800, false);
         // PlayerPrefs.DeleteKey(_Score);
     }
     private void Start()
